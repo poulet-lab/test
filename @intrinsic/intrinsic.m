@@ -1,7 +1,7 @@
 classdef intrinsic < handle & matlab.mixin.CustomDisplay
 
     properties %(Access = private)
-        Version         = '1.0.0-alpha1';
+        Version         = '1.0.0-beta1';
         Flags
 
         h               = [] 	% handles
