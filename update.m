@@ -133,6 +133,9 @@ classdef update
                 error('Error moving update in place.')
             end
             
+            %% delete remains
+            rmdir(dnUpdate,'s')
+            
         end
         
         function varargout = checkUpdate(obj)
@@ -156,9 +159,6 @@ classdef update
             tmp1   = find(vMat.Remote > vMat.Local,1);
             tmp2   = find(vMat.Remote < vMat.Local,1);
             result = ~isempty(tmp1) && (isempty(tmp2) || tmp2>tmp1);
-            
-            % check pre-release string if necessary
-            
             
             if ~result
                 % TODO: check pre-release string
@@ -217,19 +217,3 @@ classdef update
         end
     end
 end
-    
-
-% % % compare versions
-% % matRemote = verMatrix(strRemote);
-% % matLocal  = verMatrix(strLocal);
-% % tmp1 = find(matRemote > matLocal,1);
-% % tmp2 = find(matRemote < matLocal,1);
-% % if ~isempty(tmp1) && (isempty(tmp2) || tmp2>tmp1)
-% %     disp('Update available!')
-% % else
-% %     disp('You are up to date.')
-% %     return
-% % end
-% % 
-% % 
-% % % char2dec = @(s) base2dec(dec2base(double(s)-96,27)',27);
