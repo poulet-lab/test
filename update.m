@@ -1,11 +1,8 @@
 classdef update
-
-    properties (Constant)
-        BaseDirectory = fileparts(mfilename('fullpath'))
-        LocalVersion = intrinsic.version
-    end
     
     properties (SetAccess = immutable)
+        BaseDirectory
+        LocalVersion
         RemoteVersion
         RemoteURL
         RemoteZIP
@@ -26,18 +23,21 @@ classdef update
                 error('Can''t connect to the internet.')
             end
 
-%             % check for version control
-%             if exist(fullfile(obj.BaseDirectory,'.git'),'dir')
-%                 url = sprintf('%s/repos/%s',...
-%                     obj.RestBase,obj.RepoName);
-%                 link = webread(url,obj.RestOpts).html_url;
-%                 error(['You are using intrinsic with GIT version ' ...
-%                     'control. Use GIT to update your local ' ...
-%                     'repository.\nAlternatively, manually download ' ...
-%                     'the newest release of intrinsic from ' ...
-%                     '<a href="matlab: web(''%s'');">%s</a>.\n'],link,link)
-%             end
+            % check for version control
+            if exist(fullfile(obj.BaseDirectory,'.git'),'dir')
+                url = sprintf('%s/repos/%s',...
+                    obj.RestBase,obj.RepoName);
+                link = [webread(url,obj.RestOpts).html_url '/releases'];
+                error(['You are using intrinsic with GIT version ' ...
+                    'control. Use GIT to update your local ' ...
+                    'repository.\nAlternatively, manually download ' ...
+                    'the newest release of intrinsic from ' ...
+                    '<a href="matlab: web(''%s'');">%s</a>.\n'],link,link)
+            end
             
+            % get local version
+            obj.LocalVersion = intrinsic.version;
+
             % get remote data from github
             url = sprintf('%s/repos/%s/releases',obj.RestBase,obj.RepoName);
             data = webread(url,obj.RestOpts);
