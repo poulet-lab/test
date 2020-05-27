@@ -1,18 +1,13 @@
-classdef intrinsic < handle & matlab.mixin.CustomDisplay
-
-    properties %(Access = private)
-        Version         = '1.0.0-beta2';
-        Flags
-
-        h               = [] 	% handles
-
-        DirBase         = fileparts(fileparts(mfilename('fullpath')));
-        DirSave
-        DirLoad         = [];
-
-        VideoPreview
-
-        Scale           = 0.5
-        ...
-        and so on and so forth
-        (just a test)
+classdef intrinsic
+    
+    methods
+        function obj = intrinsic()
+            % ...
+        end
+    end
+    
+    methods (Static)
+        out = version()
+    end
+    
+end
