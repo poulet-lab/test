@@ -25,17 +25,17 @@ classdef update
                 error('Can''t connect to the internet.')
             end
 
-%             %% check for version control
-%             if exist(fullfile(obj.BaseDirectory,'.git'),'dir')
-%                 url = sprintf('%s/repos/%s/%s',...
-%                     obj.RestBase,obj.RepoOwner,obj.RepoName);
-%                 link = [webread(url,obj.RestOpts).html_url '/releases'];
-%                 error(['You are using intrinsic with GIT version ' ...
-%                     'control. Use GIT to update your local ' ...
-%                     'repository.\nAlternatively, manually download ' ...
-%                     'the newest release of intrinsic from ' ...
-%                     '<a href="matlab: web(''%s'');">%s</a>.\n'],link,link)
-%             end
+            %% check for version control
+            if exist(fullfile(obj.BaseDirectory,'.git'),'dir')
+                url = sprintf('%s/repos/%s/%s',...
+                    obj.RestBase,obj.RepoOwner,obj.RepoName);
+                link = [webread(url,obj.RestOpts).html_url '/releases'];
+                error(['You are using intrinsic with GIT version ' ...
+                    'control. Use GIT to update your local ' ...
+                    'repository.\nAlternatively, manually download ' ...
+                    'the newest release of intrinsic from ' ...
+                    '<a href="matlab: web(''%s'');">%s</a>.\n'],link,link)
+            end
             
             %% get local version
             obj.LocalVersion = intrinsic.version;
@@ -116,6 +116,7 @@ classdef update
             end
             
             %% move update in place
+            fprintf('Moving update in place ... ');
             fUpdate = dir(dnUpdateSub);
             rgx = '^\.{1,2}(gitignore)?$';
             fUpdate(arrayfun(@(x) any(regexp(x.name,rgx)),fUpdate)) = [];
@@ -125,6 +126,13 @@ classdef update
                     fullfile(fUpdate(ii).folder,fUpdate(ii).name),...
                     fullfile(obj.BaseDirectory,fUpdate(ii).name));
             end
+            if all(status)
+                fprintf('Done.\n')
+            else
+                fprintf('Failed.\n')
+                error('Error moving update in place.')
+            end
+            
         end
         
         function varargout = checkUpdate(obj)
